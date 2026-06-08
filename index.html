@@ -497,7 +497,7 @@ html.light .ai-tab.active{background:#e8622a;border-color:#e8622a;color:#fff}
 .ai-panel.hidden{display:none}
 
 /* SCROLL DOWN INDICATOR */
-.scroll-down{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;z-index:1;animation:fadeUp .6s .6s ease both;opacity:0;animation-fill-mode:forwards}
+.scroll-down{position:absolute;bottom:36px;left:50%;transform:translateX(-50%) !important;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;z-index:1;animation:fadeUp .6s .6s ease both;opacity:0;animation-fill-mode:forwards}
 .scroll-down:hover .scroll-down-icon{transform:translateY(4px)}
 .scroll-down-text{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .scroll-down-icon{color:var(--muted);transition:transform .3s ease;animation:bounce 2s infinite}
@@ -820,8 +820,8 @@ html:not(.light) .partner-badge-svg svg path[fill="#000000"]{fill:#e8edf2}
 <span class="comment"># Install latest Shopify CLI (recommended)</span>
 <span class="cmd">npm install</span> <span class="flag">-g</span> @shopify/cli@latest
 
-<span class="comment"># Or install specific packages</span>
-<span class="cmd">npm install</span> <span class="flag">-g</span> @shopify/cli @shopify/theme
+<span class="comment"># Or install specific version</span>
+<span class="cmd">npm install</span> <span class="flag">-g</span> @shopify/cli
 
 <span class="comment"># Mac alternative (Homebrew)</span>
 <span class="cmd">brew tap</span> shopify/shopify
@@ -856,6 +856,7 @@ html:not(.light) .partner-badge-svg svg path[fill="#000000"]{fill:#e8edf2}
 <span class="comment"># Real example:</span>
 <span class="cmd">shopify theme pull</span> <span class="flag">--store</span> <span class="string">rinkesh-demo</span> <span class="flag">-t</span> <span class="string">152474845378</span></pre>
           </div>
+          <div class="note info" style="margin-top:10px"><span class="note-icon">🛡️</span><span><strong>Before your first pull,</strong> make sure a <code>.shopifyignore</code> file exists in your project root. It prevents Shopify from downloading unnecessary files (like <code>node_modules/</code>, <code>.git/</code>, config secrets) that should never be pulled or pushed to the store.</span></div>
         </div>
 
         <!-- HOW TO FIND THEME ID -->
@@ -874,41 +875,51 @@ html:not(.light) .partner-badge-svg svg path[fill="#000000"]{fill:#e8edf2}
           <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">🚀 Start dev server with Theme Editor sync</div>
           <div class="code-block">
             <div class="code-header"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-title">terminal</div></div>
-            <pre><span class="comment"># Normal dev server (hot reload only)</span>
+            <pre><span class="comment"># ─────────────────────────────────────────────────────────────</span>
+<span class="comment"># FIRST TIME or NEW MACHINE — specify store + optional theme ID</span>
+<span class="comment"># ─────────────────────────────────────────────────────────────</span>
+
+<span class="comment"># Hot reload only (no Theme Editor sync)</span>
 <span class="cmd">shopify theme dev</span> <span class="flag">--store</span> <span class="string">rinkesh-demo</span>
 
-<span class="comment"># Dev with Theme Editor sync (recommended)</span>
-<span class="comment"># Changes in Shopify Theme Editor also sync back to your local files</span>
+<span class="comment"># With Theme Editor sync (recommended)</span>
 <span class="cmd">shopify theme dev</span> <span class="flag">--store</span> <span class="string">rinkesh-demo</span> <span class="flag">--theme-editor-sync</span>
 
-<span class="comment"># Dev with a specific theme ID</span>
-<span class="cmd">shopify theme dev</span> <span class="flag">--store</span> <span class="string">rinkesh-demo</span> <span class="flag">-t</span> <span class="string">152474845378</span></pre>
+<span class="comment"># With a specific theme ID + Theme Editor sync</span>
+<span class="cmd">shopify theme dev</span> <span class="flag">--store</span> <span class="string">rinkesh-demo</span> <span class="flag">-t</span> <span class="string">152474845378</span> <span class="flag">--theme-editor-sync</span>
+
+<span class="comment"># ─────────────────────────────────────────────────────────────</span>
+<span class="comment"># ALREADY PULLED — theme is set up, CLI knows store & theme</span>
+<span class="comment"># Just run this — no --store or -t needed</span>
+<span class="comment"># ─────────────────────────────────────────────────────────────</span>
+
+<span class="cmd">shopify theme dev</span> <span class="flag">--theme-editor-sync</span></pre>
           </div>
-          <div class="note tip" style="margin-top:12px"><span class="note-icon">💡</span><span><strong><code>--theme-editor-sync</code></strong> is very useful — if you or a client adjusts settings in the Shopify Theme Editor while you're in dev mode, those changes sync back to your local files automatically. No manual re-pull needed.</span></div>
+          <div class="note tip" style="margin-top:12px"><span class="note-icon">💡</span><span><strong><code>--theme-editor-sync</code></strong> syncs Theme Editor changes back to your local files in real time. If you or a client updates any setting in the Shopify Theme Editor while dev is running, your local files update automatically — no manual re-pull needed.</span></div>
+          <div class="note info" style="margin-top:10px"><span class="note-icon">⚡</span><span><strong>Already pulled the theme?</strong> Just run <code>shopify theme dev --theme-editor-sync</code> — the CLI remembers your store and theme from the previous session. No need to pass <code>--store</code> or <code>-t</code> every time.</span></div>
         </div>
       </div>
 
       <div class="step">
         <div class="step-header">
           <div class="step-icon">🔑</div>
-          <div><div class="step-title">Login & Start Dev Server</div><div class="step-subtitle">Authenticate once — CLI remembers you</div></div>
+          <div><div class="step-title">Login — First Time / New Machine Only</div><div class="step-subtitle">Authenticate once — CLI remembers you for future sessions</div></div>
         </div>
         <div class="code-block">
           <div class="code-header"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-title">terminal</div></div>
-          <pre><span class="comment"># Login (opens browser for Shopify OAuth)</span>
-<span class="cmd">shopify</span> auth login
+          <pre><span class="comment"># Login — opens browser for Shopify OAuth (one time only)</span>
+<span class="cmd">shopify auth login</span>
 
-<span class="comment"># Clone repo and start dev server</span>
-<span class="cmd">git clone</span> https://github.com/YOUR-ORG/store-theme.git
-<span class="cmd">cd</span> store-theme
+<span class="comment"># Verify you're logged in</span>
+<span class="cmd">shopify whoami</span>
 
-<span class="comment"># ⚡ Start local dev — connects to YOUR store preview</span>
-<span class="cmd">shopify theme dev</span> <span class="flag">--store</span>=<span class="string">your-store.myshopify.com</span>
+<span class="comment"># Check your store is accessible</span>
+<span class="cmd">shopify theme list</span> <span class="flag">--store</span> <span class="string">your-store</span>
 
-<span class="comment"># Preview URL appears → only YOU can see it, not customers</span>
+<span class="comment"># Preview URL opens in browser — only YOU see it, not customers</span>
 <span class="comment"># ✓ https://your-store.myshopify.com/?preview_theme_id=xxx</span></pre>
         </div>
-        <div class="note tip"><span class="note-icon">💡</span><span>Each developer runs <code>shopify theme dev</code> on their own machine. Changes are instant — no need to push just to see them.</span></div>
+        <div class="note tip"><span class="note-icon">💡</span><span>You only need to run <code>shopify auth login</code> once per machine. After that, the CLI keeps your session. If you're already logged in from a previous session, just run <code>shopify theme dev --theme-editor-sync</code> directly.</span></div>
       </div>
 
       <div class="step">
@@ -1542,7 +1553,7 @@ html:not(.light) .partner-badge-svg svg path[fill="#000000"]{fill:#e8edf2}
             <div style="display:flex;flex-direction:column;gap:8px;font-size:.83rem;color:var(--muted)">
               <div style="display:flex;gap:8px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">1.</span>Pull latest <code>main</code> in VS Code</div>
               <div style="display:flex;gap:8px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">2.</span>Create your feature branch</div>
-              <div style="display:flex;gap:8px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">3.</span>Run <code>shopify theme dev</code></div>
+              <div style="display:flex;gap:8px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">3.</span>Run <code>shopify theme dev --theme-editor-sync</code></div>
               <div style="display:flex;gap:8px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">4.</span>Start building 🚀</div>
             </div>
           </div>
@@ -2153,7 +2164,7 @@ Shopify 2.0 theme. Store: your-store.myshopify.com
 
       <!-- FILE TABS -->
       <div class="ai-tabs" style="margin-bottom:0">
-        <button class="ai-tab active" onclick="switchFile('readme',this)">📄 readme.md</button>
+        <button class="ai-tab active" onclick="switchFile('readme',this)">📄 CLAUDE.md</button>
         <button class="ai-tab" onclick="switchFile('section',this)">🧩 readme-ai-custom-section.md</button>
         <button class="ai-tab" onclick="switchFile('slider',this)">🎠 readme-ai-custom-slider.md</button>
       </div>
@@ -2162,7 +2173,7 @@ Shopify 2.0 theme. Store: your-store.myshopify.com
       <div style="background:var(--surface2);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px" id="file-desc">
         <span style="font-size:1.1rem;flex-shrink:0">📄</span>
         <div>
-          <div style="font-size:.85rem;font-weight:700;margin-bottom:3px" id="file-title">readme.md — Main AI Personality & Role File</div>
+          <div style="font-size:.85rem;font-weight:700;margin-bottom:3px" id="file-title">CLAUDE.md — Main AI Personality & Role File</div>
           <div style="font-size:.8rem;color:var(--muted);line-height:1.5" id="file-subtitle">Defines Claude's role as a Shopify expert, coding rules, CSS format, button structure, schema conventions, and all general instructions for every session.</div>
         </div>
       </div>
@@ -2172,16 +2183,14 @@ Shopify 2.0 theme. Store: your-store.myshopify.com
         <div class="code-block" style="max-height:480px;overflow-y:auto">
           <div class="code-header">
             <div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div>
-            <div class="code-title">readme.md — place in project root</div>
+            <div class="code-title">CLAUDE.md — place in project root</div>
           </div>
           <pre style="white-space:pre-wrap;word-break:break-word"><span class="comment"># You are my Shopify expert engineer.</span>
 
 I am working on Shopify theme development using Shopify CLI and VS Code.
 I am using the Shopify Dawn theme as my base theme.
 
-I may not always explain things perfectly, so you must understand my
-requirement carefully and guide me like a senior Shopify developer with
-real-world experience in Dawn theme.
+I may not always explain things perfectly, so you must understand my requirement carefully and guide me like a senior Shopify developer with real-world experience in Dawn theme.
 
 <span class="keyword">Your role:</span>
 - Shopify front-end expert
@@ -2190,6 +2199,17 @@ real-world experience in Dawn theme.
 - JavaScript/CSS expert
 - Shopify schema/settings expert
 - Shopify debugging expert
+
+<span class="keyword">Always help me with:</span>
+- Custom Shopify sections (Dawn-compatible)
+- Liquid code
+- CSS and responsive issues
+- JavaScript functionality (scoped properly)
+- Swiper slider integration
+- Product/collection/cart customization
+- Metafields and dynamic content
+- Performance and structure improvements
+- Shopify CLI workflow
 
 <span class="keyword">Important rules:</span>
 1. Always follow Shopify Dawn theme structure and conventions.
@@ -2201,29 +2221,88 @@ real-world experience in Dawn theme.
 7. Use dynamic schema settings instead of hard-coded values.
 8. Make everything responsive (desktop, tablet, mobile).
 9. Scope JavaScript to the section (avoid global conflicts).
-10. Support multiple instances of sections (no conflicts).
+10. When creating custom sections:
+    - Provide full Liquid section code
+    - Include proper schema
+    - Follow my spacing structure (padding/margin with section.id)
+11. When I share code, follow my coding style and improve it.
+12. If something is wrong, fix it and explain briefly.
+13. Use one-line CSS format when I ask for it.
+14. Support multiple instances of sections (no conflicts).
+15. Always think like a professional Shopify developer before answering.
 
-<span class="keyword">Button structure (always use this):</span>
+<span class="keyword">16. Button structure (always use this exact Liquid):</span>
 <span class="string">{%- if section.settings.button_label != blank -%}
   &lt;div class="btns-wrapper"&gt;
-    &lt;a href="{{ section.settings.button_link }}"
-      class="more-btn button{% if section.settings.button_style_secondary %}
-      button--secondary{% else %} button--primary{% endif %}"&gt;
+    &lt;a
+      {% if section.settings.button_link == blank %}
+        role="link" aria-disabled="true"
+      {% else %}
+        href="{{ section.settings.button_link }}"
+      {% endif %}
+      class="more-btn button{% if section.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}"
+      {{ section.shopify_attributes }}
+    &gt;
       {{ section.settings.button_label | escape }}
     &lt;/a&gt;
   &lt;/div&gt;
 {%- endif -%}</span>
 
-<span class="keyword">Schema types:</span>
-- Use <span class="cmd">richtext</span> for long content / descriptions
-- Use <span class="cmd">inline_richtext</span> for headings, labels, short text
-- Never use textarea for formatted content
+<span class="keyword">Button schema settings (always include these):</span>
+<span class="string">{
+  "type": "text",
+  "id": "button_label",
+  "label": "t:sections.image-with-text.blocks.button.settings.button_label.label",
+  "info": "t:sections.image-with-text.blocks.button.settings.button_label.info"
+},
+{
+  "type": "url",
+  "id": "button_link",
+  "label": "t:sections.image-with-text.blocks.button.settings.button_link.label"
+},
+{
+  "type": "checkbox",
+  "id": "button_style_secondary",
+  "default": false,
+  "label": "t:sections.image-with-text.blocks.button.settings.outline_button.label"
+}</span>
 
-<span class="keyword">CSS format (one-line per selector):</span>
-<span class="string">.section-wrapper { overflow: hidden; }
-.section-wrapper .inner { display: flex; gap: 30px; }</span></pre>
+<span class="keyword">17. Schema field types for content:</span>
+- Use <span class="cmd">richtext</span> for long content, descriptions, paragraphs (supports formatting)
+- Use <span class="cmd">inline_richtext</span> for headings, subheadings, labels, short text
+- Use <span class="cmd">text</span> only for simple single-line values
+- <span class="flag">Never</span> use <span class="cmd">textarea</span> for formatted content
+
+<span class="keyword">Schema examples:</span>
+<span class="string">{
+  "type": "inline_richtext",
+  "id": "heading",
+  "label": "Heading",
+  "default": "Section heading"
+},
+{
+  "type": "richtext",
+  "id": "description",
+  "label": "Description",
+  "default": "&lt;p&gt;Add your description here&lt;/p&gt;"
+}</span>
+
+<span class="keyword">18. CSS format rules (one-line per selector, wrapper-scoped):</span>
+<span class="string">.featured-collection-wrapper { overflow: hidden; }
+.featured-collection-wrapper .swiper-slide { height: auto; }
+
+.featured-collection-wrapper .sec-head { align-items: center; margin-bottom: 40px; }
+.featured-collection-wrapper .sec-head.text-align-left { justify-content: space-between; }
+.featured-collection-wrapper .sec-head.text-align-center { justify-content: center; }
+
+.featured-collection-wrapper .section-body-area.with-feature-image { display: flex; gap: 30px; }
+.featured-collection-wrapper .section-body-area .feature-image { display: flex; position: relative; width: 44%; max-width: 620px; flex-shrink: 0; border-radius: 0; overflow: hidden; }
+.featured-collection-wrapper .section-body-area.with-feature-image .collection-box { width: calc(56% - 30px); flex-grow: 1; }</span>
+
+<span class="keyword">My goal:</span>
+I want to build high-quality, scalable Shopify themes using Dawn, create custom sections, fix issues quickly, and use AI as my development assistant.</pre>
         </div>
-        <div class="note tip" style="margin-top:12px"><span class="note-icon">📁</span><span>Save as <strong>readme.md</strong> in your project root folder. Claude Code reads this file automatically at the start of every session.</span></div>
+        <div class="note tip" style="margin-top:12px"><span class="note-icon">📁</span><span>Save as <strong>CLAUDE.md</strong> in your project root folder. Claude Code reads this file automatically at the start of every session — no need to repeat instructions.</span></div>
       </div>
 
       <div id="file-panel-section" class="file-panel" style="display:none">
@@ -2237,14 +2316,23 @@ real-world experience in Dawn theme.
 When I ask you to create any custom Shopify section, always follow
 my custom section format below.
 
-<span class="keyword">File naming:</span>
-- Section file: section-name.liquid (kebab-case)
-- CSS asset file: section-name.css
+You must create the section using Shopify Liquid, schema, CSS, and JS if required.
 
-<span class="keyword">Always include at top:</span>
+<span class="keyword">Main rules:</span>
+
+<span class="keyword">1. File naming (kebab-case):</span>
+- Section file: <span class="cmd">banner-with-text.liquid</span>
+- CSS asset file: <span class="cmd">banner-with-text.css</span>
+
+<span class="keyword">2. Always include CSS asset at the top of the liquid file:</span>
 <span class="string">{{ 'section-name.css' | asset_url | stylesheet_tag }}</span>
 
-<span class="keyword">Dynamic spacing structure (always include):</span>
+<span class="keyword">3. Always include this dynamic spacing structure:</span>
+- Desktop margin top / bottom
+- Desktop padding top / bottom
+- Mobile padding top / bottom
+
+<span class="keyword">4. Always use this scoped style block:</span>
 <span class="string">{%- style -%}
   @media screen and (min-width: 750px) {
     #shopify-section-{{ section.id }} {
@@ -2264,33 +2352,183 @@ my custom section format below.
   }
 {%- endstyle -%}</span>
 
-<span class="keyword">Main wrapper (always use this):</span>
-<span class="string">&lt;div class="section-{{ section.id }} section-{{ section.id }}-padding
-  color-{{ section.settings.color_scheme }} gradient
-  section-main-box CUSTOM-SECTION-CLASS"&gt;
+<span class="keyword">5. Main wrapper format (always use this):</span>
+<span class="string">&lt;div class="section-{{ section.id }} section-{{ section.id }}-padding section-{{ section.id }}-margin color-{{ section.settings.color_scheme }} gradient section-main-box CUSTOM-SECTION-CLASS"&gt;
+  &lt;!-- section content here --&gt;
 &lt;/div&gt;</span>
 
-<span class="keyword">Schema always includes:</span>
-- color_scheme setting
-- Desktop: padding_top, padding_bottom, margin_top, margin_bottom
-- Mobile: padding_top_mobi, padding_bottom_mobi
-- name, class, tag: section, presets
+Replace <span class="flag">CUSTOM-SECTION-CLASS</span> with the section-specific wrapper class.
+Example: <span class="cmd">banner-with-text-main</span>
 
-<span class="keyword">Heading structure:</span>
-<span class="string">{% if section.settings.heading != blank %}
-  &lt;div class="sec-head text-align-{{ section.settings.text_align }}"&gt;
-    &lt;h2 class="sec-title"&gt;{{ section.settings.heading }}&lt;/h2&gt;
+<span class="keyword">6. Schema must always include:</span>
+- name, class, tag: section, settings, presets
+- Schema class must match the section wrapper name
+
+Example: <span class="string">"class": "banner-with-text-wrapper"</span>
+
+<span class="keyword">7. Always include color_scheme setting first:</span>
+<span class="string">{
+  "type": "color_scheme",
+  "id": "color_scheme",
+  "label": "Color scheme",
+  "default": "background-1"
+}</span>
+
+<span class="keyword">8. Always include this desktop spacing group:</span>
+<span class="string">{
+  "type": "header",
+  "content": "Section Settings"
+},
+{
+  "type": "range",
+  "id": "padding_top",
+  "min": 0,
+  "max": 200,
+  "step": 2,
+  "unit": "px",
+  "label": "Padding Top",
+  "default": 0
+},
+{
+  "type": "range",
+  "id": "padding_bottom",
+  "min": 0,
+  "max": 200,
+  "step": 2,
+  "unit": "px",
+  "label": "Padding Bottom",
+  "default": 0
+},
+{
+  "type": "range",
+  "id": "margin_top",
+  "min": 0,
+  "max": 200,
+  "step": 2,
+  "unit": "px",
+  "label": "Margin Top",
+  "default": 0
+},
+{
+  "type": "range",
+  "id": "margin_bottom",
+  "min": 0,
+  "max": 200,
+  "step": 2,
+  "unit": "px",
+  "label": "Margin Bottom",
+  "default": 0
+}</span>
+
+<span class="keyword">9. Always include this mobile spacing group:</span>
+<span class="string">{
+  "type": "header",
+  "content": "Section Settings For Mobile"
+},
+{
+  "type": "range",
+  "id": "padding_top_mobi",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "unit": "px",
+  "label": "Padding top",
+  "default": 25
+},
+{
+  "type": "range",
+  "id": "padding_bottom_mobi",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "unit": "px",
+  "label": "Padding bottom",
+  "default": 25
+}</span>
+
+<span class="keyword">10. CSS format rules:</span>
+- One-line per selector (no multi-line property blocks)
+- Each new CSS class starts on a new line
+- Group same-breakpoint responsive rules in one shared <span class="cmd">@media</span> block
+- Use wrapper-first scoped architecture
+
+<span class="keyword">CSS example:</span>
+<span class="string">.banner-with-text-main { width: 100%; position: relative; }
+.banner-with-text-main .banner-inner { display: flex; align-items: center; gap: 40px; }
+.banner-with-text-main .banner-content { width: 50%; }
+@media screen and (max-width: 749px) {
+.banner-with-text-main .banner-inner { flex-direction: column; gap: 20px; }
+.banner-with-text-main .banner-content { width: 100%; }
+}</span>
+
+<span class="keyword">11. JavaScript rules:</span>
+- Add JS only if required
+- Scope inside section using section id or wrapper class
+- Do not affect other sections
+- Support multiple section instances (no conflicts)
+
+<span class="keyword">12. Section heading structure (always use this):</span>
+<span class="string">{% if section.settings.heading != blank or section.settings.sub_title != blank %}
+  &lt;div class="sec-head text-align-{{ section.settings.text_align }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"&gt;
+
+    {% if section.settings.heading != blank %}
+      &lt;h2 class="sec-title"&gt;{{ section.settings.heading }}&lt;/h2&gt;
+    {% endif %}
+
     {% if section.settings.sec_text != blank %}
       &lt;div class="sec-text"&gt;{{ section.settings.sec_text }}&lt;/div&gt;
     {% endif %}
+
   &lt;/div&gt;
 {% endif %}</span>
 
-<span class="keyword">CSS format rules:</span>
-- One line per selector
-- Group same-breakpoint media queries together
-- Wrapper-first architecture
-- No multi-line property spacing</pre>
+<span class="keyword">13. Heading schema settings (always include these):</span>
+<span class="string">{
+  "type": "inline_richtext",
+  "id": "heading",
+  "label": "Heading",
+  "default": "Section heading"
+},
+{
+  "type": "richtext",
+  "id": "sec_text",
+  "label": "Content",
+  "default": "&lt;p&gt;Add section content here&lt;/p&gt;"
+},
+{
+  "type": "select",
+  "id": "text_align",
+  "label": "Text alignment",
+  "default": "center",
+  "options": [
+    {
+      "value": "left",
+      "label": "Left"
+    },
+    {
+      "value": "center",
+      "label": "Center"
+    },
+    {
+      "value": "right",
+      "label": "Right"
+    }
+  ]
+}</span>
+
+<span class="keyword">14. Extra settings — add based on section needs:</span>
+- <span class="cmd">image_picker</span> for images
+- <span class="cmd">text</span> for simple single-line values
+- <span class="cmd">inline_richtext</span> for headings / labels
+- <span class="cmd">richtext</span> for descriptions / long content
+- <span class="cmd">url</span> for button links
+- <span class="cmd">collection</span> / <span class="cmd">product</span> if needed
+- <span class="cmd">checkbox</span> / <span class="cmd">select</span> / <span class="cmd">range</span> / <span class="cmd">color</span> where useful
+
+<span class="flag">Important:</span> Schema JSON must always be formatted as expanded multi-line objects.
+Do not write schema settings, blocks, presets, or options as one-line objects.
+
+When I say <span class="flag">"create custom section"</span>, use this full format automatically.</pre>
         </div>
         <div class="note tip" style="margin-top:12px"><span class="note-icon">📁</span><span>Save as <strong>readme-ai-custom-section.md</strong> in your project root. When you say "create custom section", Claude follows this format automatically.</span></div>
       </div>
@@ -2303,35 +2541,77 @@ my custom section format below.
           </div>
           <pre style="white-space:pre-wrap;word-break:break-word"><span class="comment"># Custom Slider Section Format Rules</span>
 
-When I ask to create a custom Shopify section with slider,
-always use my custom Swiper slider format.
+When I ask to create a custom Shopify section with slider, always use my custom Swiper slider format.
 <span class="keyword">Do not use Shopify native slider. Always use Swiper.</span>
 
-<span class="keyword">Slider options via capture:</span>
+<span class="keyword">1. Add section CSS file at top:</span>
+<span class="string">{{ 'section-name.css' | asset_url | stylesheet_tag }}</span>
+
+<span class="keyword">2. Spacing style structure:</span>
+- Desktop margin/padding starts from 750px media query
+- Use <span class="cmd">#shopify-section-{{ section.id }}</span> for margin
+- Use <span class="cmd">.section-{{ section.id }}-padding</span> for padding
+- Mobile padding uses <span class="cmd">padding_top_mobi</span> / <span class="cmd">padding_bottom_mobi</span>
+
+<span class="keyword">3. Always create slider options using capture:</span>
 <span class="string">{%- capture slider_options -%}
   "slidesPerView": 3,
   "spaceBetween": 20,
   "loop": true,
+
+  {% if section.settings.show_pagination %}
+  "pagination": {
+    "el": "#shopify-section-{{ section.id }} .swiper-pagination",
+    "clickable": true
+  },
+  {% endif %}
+
   "autoplay": {
     "delay": 3000,
     "disableOnInteraction": false
   },
+
+  {% if section.settings.navigation %}
+  "navigation": {
+    "nextEl": "#shopify-section-{{ section.id }} .swiper-button-next",
+    "prevEl": "#shopify-section-{{ section.id }} .swiper-button-prev"
+  },
+  {% endif %}
+
   "breakpoints": {
-    "0": { "slidesPerView": 1, "spaceBetween": 15 },
-    "749": { "slidesPerView": 2, "spaceBetween": 20 },
-    "990": { "slidesPerView": 3, "spaceBetween": 40 },
-    "1400": { "slidesPerView": 4, "spaceBetween": 40 }
+    "0": {
+      "slidesPerView": 1,
+      "spaceBetween": 15
+    },
+    "749": {
+      "slidesPerView": 2,
+      "spaceBetween": 20
+    },
+    "990": {
+      "slidesPerView": {% if section.settings.auto_width %}"auto"{% else %}3{% endif %},
+      "spaceBetween": 40
+    },
+    "1400": {
+      "slidesPerView": {% if section.settings.auto_width %}"auto"{% else %}4{% endif %},
+      "spaceBetween": {{ section.settings.space_between_slide }}
+    }
   }
 {%- endcapture -%}</span>
 
-<span class="keyword">Slider HTML structure:</span>
+<span class="keyword">4. Main section wrapper:</span>
+<span class="string">&lt;div class="section-{{ section.id }} section-{{ section.id }}-padding section-{{ section.id }}-margin color-{{ section.settings.color_scheme }} gradient section-main-box"&gt;
+  &lt;div class="page-width"&gt;
+    Section content here
+  &lt;/div&gt;
+&lt;/div&gt;</span>
+
+<span class="keyword">5. Slider enabled — use this structure:</span>
 <span class="string">{% if section.settings.enable_slider %}
   &lt;div class="swiper-main-wrapper"&gt;
-    &lt;div class="swiper"
-      data-slider-options='{ {{ slider_options }} }'&gt;
+    &lt;div class="swiper" data-slider-options='{ {{ slider_options }} }'&gt;
       &lt;div class="swiper-wrapper"&gt;
         {% for block in section.blocks %}
-          &lt;div class="swiper-slide"&gt;
+          &lt;div class="swiper-slide {% if section.settings.auto_width %} auto-width{% endif %}"&gt;
             Block content here
           &lt;/div&gt;
         {% endfor %}
@@ -2339,31 +2619,169 @@ always use my custom Swiper slider format.
     &lt;/div&gt;
 
     {% if section.settings.navigation %}
-      &lt;div class="nav-btns"&gt;
-        &lt;div class="btn-arrow swiper-button-prev"&gt;&lt;/div&gt;
-        &lt;div class="btn-arrow swiper-button-next"&gt;&lt;/div&gt;
+      &lt;div class="nav-btns {% if section.settings.show_navigation_in == 'desktop' %}small-hide{% endif %} {% if section.settings.show_navigation_in == 'mobile' %}medium-hide large-up-hide{% endif %}"&gt;
+        &lt;div class="btn-arrow swiper-button-prev"&gt;{{ 'left-arrow.svg' | inline_asset_content }}&lt;/div&gt;
+        &lt;div class="btn-arrow swiper-button-next"&gt;{{ 'right-arrow.svg' | inline_asset_content }}&lt;/div&gt;
       &lt;/div&gt;
     {% endif %}
 
     {% if section.settings.show_pagination %}
-      &lt;div class="swiper-pagination"&gt;&lt;/div&gt;
+      &lt;div class="swiper-pagination {{ section.settings.pagination_type }} {% if section.settings.show_pagination_in == 'desktop' %}small-hide{% endif %} {% if section.settings.show_pagination_in == 'mobile' %}medium-hide large-up-hide{% endif %}"&gt;&lt;/div&gt;
     {% endif %}
-  &lt;/div&gt;
-{% else %}
-  &lt;div class="section-items"&gt;
+  &lt;/div&gt;</span>
+
+<span class="keyword">6. Slider disabled — always include grid fallback:</span>
+<span class="string">{% else %}
+  &lt;div class="section-name-items"&gt;
     {% for block in section.blocks %}
-      &lt;div class="section-item"&gt;Block content&lt;/div&gt;
+      &lt;div class="section-name-item"&gt;
+        Block content here
+      &lt;/div&gt;
     {% endfor %}
   &lt;/div&gt;
 {% endif %}</span>
 
-<span class="keyword">Required slider schema settings:</span>
-enable_slider, auto_width, space_between_slide,
-show_pagination, show_pagination_in, pagination_type,
-navigation, show_navigation_in
+<span class="keyword">7. Required slider schema settings (always include all):</span>
+<span class="string">{
+  "type": "header",
+  "content": "Slider Options"
+},
+{
+  "type": "checkbox",
+  "id": "enable_slider",
+  "default": false,
+  "label": "Enable Slider"
+},
+{
+  "type": "checkbox",
+  "id": "auto_width",
+  "default": false,
+  "label": "Auto width"
+},
+{
+  "type": "range",
+  "id": "space_between_slide",
+  "min": 0,
+  "max": 200,
+  "step": 2,
+  "unit": "px",
+  "label": "Space Between Slide",
+  "default": 40
+},
+{
+  "type": "checkbox",
+  "id": "show_pagination",
+  "default": false,
+  "label": "Show pagination"
+},
+{
+  "type": "select",
+  "id": "show_pagination_in",
+  "options": [
+    { "value": "both", "label": "Both" },
+    { "value": "desktop", "label": "Desktop" },
+    { "value": "mobile", "label": "Mobile" }
+  ],
+  "default": "both",
+  "label": "Show pagination in"
+},
+{
+  "type": "select",
+  "id": "pagination_type",
+  "options": [
+    { "value": "dot", "label": "Dot" },
+    { "value": "border", "label": "Dot border" },
+    { "value": "line", "label": "Line" },
+    { "value": "number", "label": "Number" }
+  ],
+  "default": "dot",
+  "label": "Pagination type"
+},
+{
+  "type": "checkbox",
+  "id": "navigation",
+  "label": "Show navigation",
+  "default": true
+},
+{
+  "type": "select",
+  "id": "show_navigation_in",
+  "options": [
+    { "value": "both", "label": "Both" },
+    { "value": "desktop", "label": "Desktop" },
+    { "value": "mobile", "label": "Mobile" }
+  ],
+  "default": "both",
+  "label": "Show navigation in"
+}</span>
 
-<span class="keyword">JS supports multiple Swiper instances on same page
-using data-slider-options attribute.</span></pre>
+<span class="keyword">8. Rename everything based on the new section:</span>
+- CSS file name, schema name, schema class
+- Wrapper class, item class, block type, preset name
+- <span class="flag">Do not copy icon-with-text names unless building that section</span>
+
+<span class="keyword">9. CSS rules:</span>
+- One-line per selector, wrapper-first scoped architecture
+- Group same-breakpoint media queries in one shared <span class="cmd">@media</span> block
+- Keep each selector one line inside that shared block
+
+<span class="keyword">10. JS — must support multiple Swiper instances:</span>
+Use <span class="cmd">data-slider-options</span> attribute to pass options.
+Init each Swiper using its own wrapper — no global conflicts.
+
+<span class="keyword">11. Section heading structure (always use this):</span>
+<span class="string">{% if section.settings.heading != blank or section.settings.sec_text != blank %}
+  &lt;div class="sec-head text-align-{{ section.settings.text_align }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"&gt;
+
+    {% if section.settings.heading != blank %}
+      &lt;h2 class="sec-title"&gt;{{ section.settings.heading }}&lt;/h2&gt;
+    {% endif %}
+
+    {% if section.settings.sec_text != blank %}
+      &lt;div class="sec-text"&gt;{{ section.settings.sec_text }}&lt;/div&gt;
+    {% endif %}
+
+  &lt;/div&gt;
+{% endif %}</span>
+
+<span class="keyword">12. Heading schema settings (always include):</span>
+<span class="string">{
+  "type": "inline_richtext",
+  "id": "heading",
+  "label": "Heading",
+  "default": "Section heading"
+},
+{
+  "type": "richtext",
+  "id": "sec_text",
+  "label": "Content",
+  "default": "&lt;p&gt;Add section content here&lt;/p&gt;"
+},
+{
+  "type": "select",
+  "id": "text_align",
+  "label": "Text alignment",
+  "default": "center",
+  "options": [
+    {
+      "value": "left",
+      "label": "Left"
+    },
+    {
+      "value": "center",
+      "label": "Center"
+    },
+    {
+      "value": "right",
+      "label": "Right"
+    }
+  ]
+}</span>
+
+<span class="flag">Important:</span> Schema JSON must always be expanded multi-line objects.
+Do not write schema settings, blocks, presets, or options as one-line objects.
+
+When I say <span class="flag">"custom section with slider"</span>, automatically follow this format.</pre>
         </div>
         <div class="note tip" style="margin-top:12px"><span class="note-icon">📁</span><span>Save as <strong>readme-ai-custom-slider.md</strong> in your project root. When you say "custom section with slider", Claude follows this Swiper format automatically.</span></div>
       </div>
@@ -2374,15 +2792,51 @@ using data-slider-options attribute.</span></pre>
         <div class="code-block" style="margin:0">
           <div class="code-header"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-title">project root structure</div></div>
           <pre>my-store-theme/
-├── <span class="string">readme.md</span>                        <span class="comment"># ← AI role & general rules</span>
-├── <span class="string">readme-ai-custom-section.md</span>     <span class="comment"># ← Custom section format</span>
-├── <span class="string">readme-ai-custom-slider.md</span>      <span class="comment"># ← Swiper slider format</span>
-├── <span class="string">CLAUDE.md</span>                        <span class="comment"># ← Claude Code instructions</span>
+├── <span class="string">CLAUDE.md</span>                        <span class="comment"># ← AI role, rules & general instructions</span>
+├── <span class="string">readme-ai-custom-section.md</span>     <span class="comment"># ← Custom section format rules</span>
+├── <span class="string">readme-ai-custom-slider.md</span>      <span class="comment"># ← Swiper slider format rules</span>
 ├── sections/
 ├── assets/
 └── ...</pre>
         </div>
         <div class="note info" style="margin-top:12px"><span class="note-icon">🤖</span><span><strong>Claude Code reads all .md files in the root automatically.</strong> No setup needed — just place the files and Claude will follow your rules in every session without you needing to repeat them.</span></div>
+      </div>
+
+      <!-- CLAUDE.md IMPORTANT INFO -->
+      <div style="margin-top:20px">
+        <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">⚡ Why CLAUDE.md matters — read this carefully</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+
+          <div class="card" style="padding:16px 18px">
+            <div style="font-size:1.3rem;margin-bottom:8px">🧠</div>
+            <div style="font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--text)">Claude reads it first — every session</div>
+            <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Claude Code automatically reads <code>CLAUDE.md</code> at the start of every session. You never need to re-explain your rules, role, or coding style — it's all loaded instantly.</div>
+          </div>
+
+          <div class="card" style="padding:16px 18px">
+            <div style="font-size:1.3rem;margin-bottom:8px">📋</div>
+            <div style="font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--text)">It defines the AI's entire behaviour</div>
+            <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Everything in <code>CLAUDE.md</code> — role, rules, button structure, schema types, CSS format — becomes Claude's default behaviour for your project. No extra prompting needed.</div>
+          </div>
+
+          <div class="card" style="padding:16px 18px">
+            <div style="font-size:1.3rem;margin-bottom:8px">👥</div>
+            <div style="font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--text)">Shared across the whole team</div>
+            <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Commit <code>CLAUDE.md</code> to Git. Every developer on the team gets the same AI behaviour — consistent code output, same patterns, no one gets different results.</div>
+          </div>
+
+          <div class="card" style="padding:16px 18px">
+            <div style="font-size:1.3rem;margin-bottom:8px">🔄</div>
+            <div style="font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--text)">Keep it updated as the project grows</div>
+            <div style="font-size:.78rem;color:var(--muted);line-height:1.6">If you change a pattern, add a new rule, or update your button/CSS structure — update <code>CLAUDE.md</code> too. The AI is only as accurate as this file.</div>
+          </div>
+
+        </div>
+
+        <div class="note warn"><span class="note-icon">⚠️</span><span><strong>Never modify CLAUDE.md without team discussion.</strong> It controls how the AI behaves for all developers. An unreviewed change can break consistency across all AI-generated code in the project.</span></div>
+
+        <div class="note tip" style="margin-top:10px"><span class="note-icon">💡</span><span><strong>Pro tip:</strong> The other two files (<code>readme-ai-custom-section.md</code> and <code>readme-ai-custom-slider.md</code>) are also read automatically. Together, all three files give Claude full context — role, section format, and slider format — without you writing a single prompt instruction.</span></div>
       </div>
     </div>
 
@@ -2452,9 +2906,6 @@ using data-slider-options attribute.</span></pre>
 
 <hr class="section-divider">
 
-<!-- ══════════ CHECKLIST ══════════ -->
-<hr class="section-divider">
-
 <!-- ══════════ QUICK REFERENCE ══════════ -->
 <section class="section" id="checklist">
   <div class="container">
@@ -2469,9 +2920,10 @@ using data-slider-options attribute.</span></pre>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px">
         <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">⚡ Daily CLI</div>
         <div class="code-block" style="margin:0">
-          <pre style="padding:12px 14px;font-size:.75rem"><span class="cmd">shopify auth login</span>        <span class="comment"># once</span>
-<span class="cmd">shopify theme dev</span> <span class="flag">--store</span>=<span class="string">xxx</span>  <span class="comment"># every day</span>
-<span class="cmd">shopify theme list</span>          <span class="comment"># check themes</span></pre>
+          <pre style="padding:12px 14px;font-size:.75rem"><span class="cmd">shopify auth login</span>               <span class="comment"># once per machine</span>
+<span class="cmd">shopify theme dev</span> <span class="flag">--store</span> <span class="string">xxx</span>     <span class="comment"># first time</span>
+<span class="cmd">shopify theme dev</span> <span class="flag">--theme-editor-sync</span>  <span class="comment"># already pulled</span>
+<span class="cmd">shopify theme list</span>               <span class="comment"># check themes</span></pre>
         </div>
       </div>
 
@@ -2518,7 +2970,7 @@ using data-slider-options attribute.</span></pre>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;margin-top:24px">
       <ul class="checklist">
         <li><div class="check-box">✓</div> Node 18+ and Git 2.28+ installed and verified</li>
-        <li><div class="check-box">✓</div> Shopify CLI installed: <code>npm i -g @shopify/cli @shopify/theme</code></li>
+        <li><div class="check-box">✓</div> Shopify CLI installed: <code>npm i -g @shopify/cli@latest</code></li>
         <li><div class="check-box">✓</div> Logged into Shopify: <code>shopify auth login</code></li>
         <li><div class="check-box">✓</div> VS Code installed with extensions: Theme Check, Shopify Liquid, Prettier, GitLens</li>
         <li><div class="check-box">✓</div> GitHub account created and added to the team org by team lead</li>
@@ -2780,7 +3232,7 @@ document.addEventListener('keydown', e => {
 
 // ── FILE TABS ──
 const fileMeta = {
-  readme:  { icon: '📄', title: 'readme.md — Main AI Personality & Role File', desc: 'Defines Claude\'s role as a Shopify expert, coding rules, CSS format, button structure, schema conventions, and all general instructions for every session.' },
+  readme:  { icon: '📄', title: 'CLAUDE.md — Main AI Personality & Role File', desc: 'Defines Claude\'s role as a Shopify expert, coding rules, CSS format, button structure, schema conventions, and all general instructions for every session.' },
   section: { icon: '🧩', title: 'readme-ai-custom-section.md — Custom Section Format', desc: 'When you say "create custom section", Claude follows this exact format: file naming, spacing structure, wrapper class, schema requirements, heading structure, CSS rules.' },
   slider:  { icon: '🎠', title: 'readme-ai-custom-slider.md — Swiper Slider Format', desc: 'When you say "custom section with slider", Claude uses Swiper (not native Shopify slider), with correct options capture, HTML structure, schema settings, and multi-instance JS support.' },
 };
